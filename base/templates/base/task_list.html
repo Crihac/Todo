@@ -1,0 +1,87 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+
+<div class="header-bar">
+    <div>
+        <h1>Hello {{request.user|title}}</h1>
+        <h3 style="margin: 0">You have <i>{{count}}</i> incomplete task{{ count|pluralize:"s"}}</h3>
+    </div>
+    {% if request.user.is_authenticated %}
+    <!-- <p>{{request.user}}</p> -->
+    <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</div>
+
+<!-- <hr>
+<h1>My To Do List</h1> -->
+<div id="search-add-wrapper">
+    <form method="GET" style="margin-top: 20px;display: flex;">
+        <input type="text" name="search-area" value="{{search_input}}">
+        <input class="button" type="submit" value="Search">
+    </form> 
+    <a id="add-link" href="{% url 'task-create' %}">Add Task</a>
+</div>
+
+
+
+
+<div class="task-item-wrapper">
+    {% for task in tasks %}
+    <div class="task-wrapper">
+        {% if task.complete %}
+        <div class="task-title">
+            <div class="task-complete-icon"></div>
+            <i><strong><a href="{% url 'task-update' task.id %}">{{task}}</a></strong></i>
+        </div>
+        <a class="delete-link" href="{% url 'task-delete' task.id  %}">&#215;</a>
+        {% else %}
+        <div class="task-title">
+            <div class="task-incomplete-icon"></div>
+            <a href="{% url 'task-update' task.id %}">{{task}}</a>
+        </div>
+        <a class="delete-link" href="{% url 'task-delete' task.id  %}">&#215;</a>
+        {% endif %}
+    </div>
+
+    {% empty %}
+    <h3>No items in the List</h3>
+    {% endfor %}
+</div>
+
+<!-- <table>
+
+    <tr>
+        <th>
+            Item
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+    </tr> -->
+
+    <!-- since here we are using object_list due to its inbuilt names but we can change this to as per our customization .for this we need to go to change in our list view(views.py)
+    and name context_object_name equal to the name which we want to defined. -->
+
+    <!-- its not necessary that each time we should use model_view name.html like format we can change this by simply using template_name=
+    in this we have to write first our app name then/urtypeofname.html like base/task.html will work also -->
+<!-- 
+    <tr>
+    {% for task in tasks %}
+        <td>
+            {{task.title}}
+        </td>
+        <td><a href="{% url 'task' task.id %}">View</a></td>
+         <td><a href="{% url 'task-update' task.id %}">Edit</a></td> -->
+        <!-- <td><a href="{% url 'task-delete' task.id %}">Delete</a></td> -->
+<!-- 
+    </tr>
+    {% empty %}
+        <H3>No items in the List</H3>
+    {% endfor %}    
+</table> -->
+
+{% endblock content %}
